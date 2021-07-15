@@ -1,23 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import {useState} from 'react'
+import Display from './components/Display'
+import List from './components/Lists'
+
 
 function App() {
+
+  const[listItems, setListItems] = useState([])
+
+  const handleDelete = idx => {
+    const filteredList = listItems.filter((item, i) => i != idx)
+    setListItems(filteredList)
+  }
+  const handleChange = idx => {
+    const copy = [...listItems]
+    copy[idx].isComplete = !copy[idx].isComplete
+    setListItems(copy)
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <List listItems = {listItems} setListItems = {setListItems}/>
+        {
+          listItems.map((item, i) => {
+          return <Display key={i} 
+                          index = {i}
+                          item ={item}
+                          handleDelete = {handleDelete}
+                          handleChange = {handleChange}
+                          />
+        })
+        }
     </div>
   );
 }
